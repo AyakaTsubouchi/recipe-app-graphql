@@ -88,6 +88,7 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+//addBook should match with addBookMutation of queries.js otherwise we get 400 error. it doesn't need to match with submitForm of addBook. it doesn't need to match with BookType.
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -112,18 +113,18 @@ const Mutation = new GraphQLObjectType({
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         genre: { type: GraphQLString },
-        recipe: { type: new GraphQLNonNull(GraphQLString) },
-        ingredients: { type: GraphQLString },
+        recipe: { type: GraphQLString },
         time: { type: GraphQLInt },
-        authorId: { type: new GraphQLNonNull(GraphQLString) },
+        ingredients: { type: GraphQLString },
+        authorId: { type: GraphQLID },
       },
       resolve(parent, args) {
         let dish = new Dish({
           name: args.name,
           genre: args.genre,
           recipe: args.recipe,
-          ingredients: args.ingredients,
           time: args.time,
+          ingredients: args.ingredients,
           authorId: args.authorId,
         });
         return dish.save();

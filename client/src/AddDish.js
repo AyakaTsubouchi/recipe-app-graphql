@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { graphql } from "react-apollo";
-import { getAuthorQuery } from "./queries/queries";
+import { graphql, compose } from "react-apollo";
+import {
+  getAuthorsQuery,
+  addDishMutation,
+  getDishesQuery,
+} from "./queries/queries";
 
 const AddDish = (props) => {
   const [name, setName] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState();
   const [recipe, setRecipe] = useState("");
-  const [author, setAuthor] = useState("");
+  const [genre, setGenre] = useState("");
+  const [authorId, setAuthorId] = useState("");
+  const [ingredients, setIngredients] = useState("");
 
   const displayAuthor = () => {
-    const data = props.data;
+    const data = props.getAuthorsQuery;
     if (data.loading) {
       return <option>data loading</option>;
     } else {
@@ -18,7 +24,17 @@ const AddDish = (props) => {
   };
   const submitForm = (e) => {
     e.preventDefault();
-    console.log(name, time, recipe, author);
+    props.addDishMutation({
+      variables: {
+        name,
+        genre,
+        recipe,
+        ingredients,
+        time,
+        authorId,
+      },
+      refetchQueries: [{ query: getDishesQuery }],
+    });
   };
   return (
     <div>
@@ -27,17 +43,10 @@ const AddDish = (props) => {
           <label>Name</label>
           <input type="text" onChange={(e) => setName(e.target.value)} />
         </div>
-        <div className="field">
-          <label>Time</label>
-          <input type="number" onChange={(e) => setTime(e.target.value)} />
-        </div>
-        <div className="field">
-          <label>Recipe</label>
-          <input type="text" onChange={(e) => setRecipe(e.target.value)} />
-        </div>
+
         <div className="field">
           <label>Author</label>
-          <select onChange={(e) => setAuthor(e.target.value)}>
+          <select onChange={(e) => setAuthorId(e.target.value)}>
             <option value="">choose the author</option>
             {displayAuthor()}
           </select>
@@ -48,4 +57,7 @@ const AddDish = (props) => {
   );
 };
 
-export default graphql(getAuthorQuery)(AddDish);
+export default compose(
+  graphql(getAuthorsQuery, { name: "getAuthorsQuery" }),
+  graphql(addDishMutation, { name: "addDishMutation" })
+)(AddDish);

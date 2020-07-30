@@ -13,7 +13,7 @@ const getDishesQuery = gql`
   }
 `;
 
-const getAuthorQuery = gql`
+const getAuthorsQuery = gql`
   {
     authors {
       name
@@ -22,4 +22,29 @@ const getAuthorQuery = gql`
   }
 `;
 
-export { getDishesQuery, getAuthorQuery };
+//the definitions in AddBook() should match with addBook()
+//todo time String to Int
+const addDishMutation = gql`
+  mutation AddDish(
+    $name: String!
+    $genre: String!
+    $recipe: String!
+    $time: Int
+    $ingredients: String
+    $authorId: ID
+  ) {
+    addDish(
+      name: $name
+      genre: $genre
+      recipe: $recipe
+      time: $time
+      ingredients: $ingredients
+      authorId: $authorId
+    ) {
+      name
+      id
+    }
+  }
+`;
+
+export { getDishesQuery, getAuthorsQuery, addDishMutation };
