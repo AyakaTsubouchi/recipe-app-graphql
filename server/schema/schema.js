@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 const _ = require("lodash");
-const Dish = require("../models/dishe");
+const Dish = require("../models/dish");
 const Author = require("../models/author");
 
 const {
@@ -28,6 +28,7 @@ const DishType = new GraphQLObjectType({
         // code to get data from db / other source
         console.log(parent);
         // return _.find(authors, { id: parent.authorId });
+        return Author.findById(parent.authorId);
       },
     },
   }),
@@ -42,6 +43,7 @@ const AuthorType = new GraphQLObjectType({
       type: new GraphQLList(DishType),
       resolve(parent, args) {
         // return _.filter(books,{authorId:parent.id})
+        return Dish.find({ authorId: parent.id });
       },
     },
   }),
@@ -57,6 +59,7 @@ const RootQuery = new GraphQLObjectType({
         // code to get data from db / other source
         console.log(typeof args.id);
         // return _.find(books, { id: args.id });
+        return Dish.findById(args.id);
       },
     },
     author: {
@@ -65,18 +68,21 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         // code to get data from db / other source
         // return _.find(authors, { id: args.id });
+        return Author.findById(args.id);
       },
     },
     dishes: {
       type: new GraphQLList(DishType),
       resolve(parent, args) {
         // return books
+        return Dish.find({});
       },
     },
     authors: {
       type: new GraphQLList(AuthorType),
       resolve(parent, args) {
         // return authors
+        return Author.find({});
       },
     },
   },

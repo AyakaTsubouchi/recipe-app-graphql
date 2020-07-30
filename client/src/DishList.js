@@ -1,19 +1,7 @@
 import React from "react";
-import { gql } from "apollo-boost";
-import { graphql } from "react-apollo";
+import { getDishesQuery } from "./queries/queries";
 
-const getDishesQuery = gql`
-  {
-    dishes {
-      name
-      id
-      genre
-      recipe
-      ingredients
-      time
-    }
-  }
-`;
+import { graphql } from "react-apollo";
 
 const DishList = (props) => {
   const displayDishes = () => {
