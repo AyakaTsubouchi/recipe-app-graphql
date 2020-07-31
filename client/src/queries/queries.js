@@ -47,4 +47,19 @@ const addDishMutation = gql`
   }
 `;
 
-export { getDishesQuery, getAuthorsQuery, addDishMutation };
+const getDishQuery = gql`
+  query getDish($id: ID) {
+    dish(id: $id) {
+      name
+      genre
+      author {
+        name
+        dishes {
+          name
+        }
+      }
+    }
+  }
+`;
+
+export { getDishesQuery, getAuthorsQuery, addDishMutation, getDishQuery };
